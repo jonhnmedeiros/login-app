@@ -1,25 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState} from 'react';
 import './App.css';
+import {Button, TextField} from "@material-ui/core";
+
 
 function App() {
+  const [usuario, setUsuario] = useState( "" );
+  const [senha, setSenha] = useState( "" );
+  const [mensagem, setMensagem] = useState("");
+
+  const handleLogin = () => {
+    fetch ("http://localhost:3004/login")
+      .then(response=>{
+        response.json()
+          .then((data)=>{
+            if ((data[0].usuario === usuario) && (data[0].senha === senha)){
+              setMensagem("Usuario e senha corretos");
+            } else {
+              console.info(data)
+							console.info(data.usuario);
+							console.info(data.senha);
+            }
+            });
+          })
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  
+        <div className="app--div--principal">
+          <div className="app--div--card--login">
+            <TextField
+            value={usuario}
+            onChange={(input)=>{setUsuario(input.target.value)}} />
+            <TextField
+            value={senha}
+            onChange={(input)=>{setSenha(input.target.value)}} />
+            <Button onClick={handleLogin}>Entrar</Button>
+            <div>{mensagem}</div>
+          </div>
+        </div>
+
   );
 }
 
